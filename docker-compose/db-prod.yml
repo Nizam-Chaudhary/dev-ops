@@ -1,8 +1,9 @@
 services:
   kafka:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:8.1.0
     container_name: kafka
     user: "0:0"
+    restart: unless-stopped
 
     environment:
       CLUSTER_ID: "Odo22N9TSiyWGOdgmbPhxQ"
@@ -47,6 +48,7 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
+    restart: unless-stopped
     depends_on:
       - kafka
     environment:
@@ -62,7 +64,7 @@ services:
       - "8080:8080"
 
   mysql:
-    image: mysql:latest
+    image: mysql:8.4
     container_name: mysql
     restart: unless-stopped
     environment:
@@ -74,7 +76,7 @@ services:
       - mysql-data:/var/lib/mysql
 
   redis:
-    image: redis/redis-stack-server:latest
+    image: redis/redis-stack-server:7.4.0-v8
     container_name: redis
     restart: unless-stopped
     environment:
@@ -85,7 +87,7 @@ services:
       - "6379:6379"
 
   mongo:
-    image: mongo:latest
+    image: mongo:8.0
     container_name: mongo
     restart: unless-stopped
     environment:
@@ -97,7 +99,7 @@ services:
       - mongo-data:/data/db
 
   postgres:
-    image: postgres:latest
+    image: postgres:18
     container_name: postgres
     restart: unless-stopped
     environment:
