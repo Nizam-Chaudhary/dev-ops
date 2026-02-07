@@ -62,7 +62,7 @@ services:
       - init
 
   grafana:
-    image: grafana/grafana:11.5.2
+    image: grafana/grafana:latest
     container_name: grafana
     restart: unless-stopped
     environment:
