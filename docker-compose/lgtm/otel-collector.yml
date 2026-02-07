@@ -19,28 +19,25 @@ processors:
   #         - set(body, ParseJSONOrDefault(body, body))
 
 exporters:
-  otlp:
+  otlp_grpc/tempo:
     endpoint: tempo:4317 # Send traces to Tempo
-    tls:
-      insecure: true
-
-  otlp/jaeger:
-    endpoint: jaeger:4317 # Send traces to Tempo
     tls:
       insecure: true
 
   prometheus:
     endpoint: "0.0.0.0:9464" # Expose Prometheus metrics
 
-  loki:
-    endpoint: http://loki:3100/loki/api/v1/push # Send logs to Loki
+  otlp_http/loki:
+    endpoint: http://loki:3100/otlp
+    tls:
+      insecure: true
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp, otlp/jaeger]
+      exporters: [otlp_grpc/tempo]
     metrics:
       receivers: [otlp]
       processors: [batch]
@@ -48,4 +45,4 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [loki]
+      exporters: [otlp_http/loki]
