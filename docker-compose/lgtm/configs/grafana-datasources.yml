@@ -40,18 +40,18 @@ datasources:
       tracesToMetrics:
         datasourceUid: prometheus
 
-  - name: Mimir
-    type: prometheus
-    access: proxy
-    orgId: 1
-    url: http://mimir:8080/prometheus
-    version: 1
-    editable: true
-    jsonData:
-      httpHeaderName1: "X-Scope-OrgID"
-      secureJsonData:
-        httpHeaderValue1: "demo"
-    isDefault: false
+  # - name: Mimir
+  #   type: prometheus
+  #   access: proxy
+  #   orgId: 1
+  #   url: http://mimir:8080/prometheus
+  #   version: 1
+  #   editable: true
+  #   jsonData:
+  #     httpHeaderName1: "X-Scope-OrgID"
+  #     secureJsonData:
+  #       httpHeaderValue1: "demo"
+  #   isDefault: false
 
   - name: Pyroscope
     uid: local-pyroscope
