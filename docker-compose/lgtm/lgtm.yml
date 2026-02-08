@@ -88,11 +88,11 @@ services:
     #     - ./configs/alertmanager-fallback.yml:/etc/alertmanager-fallback-config.yaml
     #     - /etc/localtime:/etc/localtime:ro
 
-    pyroscope:
-        image: grafana/pyroscope:1.18.0
-        container_name: pyroscope
-        # ports:
-        # - 4040:4040
+    # pyroscope:
+    #     image: grafana/pyroscope:1.18.0
+    #     container_name: pyroscope
+    # ports:
+    # - 4040:4040
 
 volumes:
     grafana-data:
