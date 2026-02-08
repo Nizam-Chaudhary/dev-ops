@@ -19,6 +19,9 @@ processors:
   #         - set(body, ParseJSONOrDefault(body, body))
 
 exporters:
+  debug:
+    verbosity: detailed
+      
   otlp_grpc/tempo:
     endpoint: tempo:4317 # Send traces to Tempo
     tls:
@@ -27,7 +30,7 @@ exporters:
   prometheus:
     endpoint: "0.0.0.0:9464" # Expose Prometheus metrics
 
-  otlp_http/loki:
+  otlp_http:
     endpoint: http://loki:3100/otlp
     tls:
       insecure: true
@@ -45,4 +48,4 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp_http/loki]
+      exporters: [otlp_http]

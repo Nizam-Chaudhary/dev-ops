@@ -1,0 +1,41 @@
+apiVersion: 1
+
+datasources:
+  - name: Loki
+    type: loki
+    uid: loki
+    url: http://loki:3100
+    access: proxy
+    isDefault: true
+    jsonData: {}
+
+  - name: Prometheus
+    type: prometheus
+    uid: prometheus
+    url: http://prometheus:9090
+    access: proxy
+    isDefault: false
+    jsonData:
+      cacheLevel: Medium
+      httpMethod: GET
+      prometheusType: Prometheus
+      prometheusVersion: 2.50.1
+
+  - name: "Tempo"
+    type: tempo
+    uid: tempo
+    url: http://tempo:3200
+    access: proxy
+    isDefault: false
+    jsonData:
+      httpMethod: GET
+      serviceMap:
+        datasourceUid: prometheus
+      streamingEnabled:
+        metrics: true
+        search: true
+      tracesToLogsV2:
+        customQuery: false
+        datasourceUid: loki
+      tracesToMetrics:
+        datasourceUid: prometheus
