@@ -19,9 +19,6 @@ processors:
   #         - set(body, ParseJSONOrDefault(body, body))
 
 exporters:
-  debug:
-    verbosity: detailed
-      
   otlp_grpc/tempo:
     endpoint: tempo:4317 # Send traces to Tempo
     tls:
@@ -30,18 +27,18 @@ exporters:
   prometheus:
     endpoint: "0.0.0.0:9464" # Expose Prometheus metrics
     
-  otlp_http/mimir:
-    endpoint: http://mimir:8080/otlp
-    headers:
-      X-Scope-OrgID: demo
-    tls:
-      insecure: true
+  # otlp_http/mimir:
+  #   endpoint: http://mimir:8080/otlp
+  #   headers:
+  #     X-Scope-OrgID: demo
+  #   tls:
+  #     insecure: true
 
   otlp_http/loki:
     endpoint: http://loki:3100/otlp
     tls:
       insecure: true
-
+    
 service:
   pipelines:
     traces:
@@ -51,7 +48,7 @@ service:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [prometheus,otlp_http/mimir]
+      exporters: [prometheus]
     logs:
       receivers: [otlp]
       processors: [batch]

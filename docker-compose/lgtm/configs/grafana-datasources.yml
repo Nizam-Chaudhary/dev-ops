@@ -52,3 +52,10 @@ datasources:
       secureJsonData:
         httpHeaderValue1: "demo"
     isDefault: false
+
+  - name: Pyroscope
+    uid: local-pyroscope
+    type: grafana-pyroscope-datasource
+    url: http://pyroscope:4040
+    jsonData:
+      keepCookies: [pyroscope_git_session]
