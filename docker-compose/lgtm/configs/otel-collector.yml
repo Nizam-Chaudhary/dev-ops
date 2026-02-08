@@ -29,8 +29,15 @@ exporters:
 
   prometheus:
     endpoint: "0.0.0.0:9464" # Expose Prometheus metrics
+    
+  otlp_http/mimir:
+    endpoint: http://mimir:8080/otlp
+    headers:
+      X-Scope-OrgID: demo
+    tls:
+      insecure: true
 
-  otlp_http:
+  otlp_http/loki:
     endpoint: http://loki:3100/otlp
     tls:
       insecure: true
@@ -44,8 +51,8 @@ service:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [prometheus]
+      exporters: [prometheus,otlp_http/mimir]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp_http]
+      exporters: [otlp_http/loki]

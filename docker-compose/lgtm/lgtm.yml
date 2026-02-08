@@ -7,10 +7,21 @@ services:
     restart: unless-stopped
     volumes:
       - ./configs/otel-collector.yml:/etc/otel-collector.yml
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - "4317:4317" # OTLP gRPC
       - "4318:4318" # OTLP HTTP
       # - "9464:9464" # Prometheus metrics
+  
+  minio:
+    image: minio/minio
+    entrypoint: [""]
+    command: ["sh", "-c", "mkdir -p /data/mimir && minio server --quiet /data"]
+    environment:
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=minio_password
+    volumes:
+      - minio-data:/data
 
   loki:
     image: grafana/loki:3.4.2
@@ -19,6 +30,7 @@ services:
     volumes:
       - ./configs/loki.yml:/etc/loki/local-config.yml
       - loki-data:/loki
+      - /etc/localtime:/etc/localtime:ro
     command: -config.file=/etc/loki/local-config.yml
 
   prometheus:
@@ -29,9 +41,10 @@ services:
     volumes:
       - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
+      - /etc/localtime:/etc/localtime:ro
     # ports:
     #   - "9090:9090"
-
+  
   tempo:
     image: grafana/tempo:2.10.0
     container_name: tempo
@@ -43,6 +56,7 @@ services:
     volumes:
       - ./configs/tempo.yml:/etc/tempo.yml
       - tempo-data:/var/tempo
+      - /etc/localtime:/etc/localtime:ro
     command: ["-config.file=/etc/tempo.yml"]
 
   grafana:
@@ -52,17 +66,29 @@ services:
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-      - GF_AUTH_BASIC_ENABLED=false
+      - GF_AUTH_BASIC_ENABLED=true
       - GF_FEATURE_TOGGLES_ENABLE=grafanaManagedRecordingRules
       - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./configs/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./configs/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
     ports:
       - 3000:3000/tcp
+    
+  mimir:
+    image: grafana/mimir:latest
+    command: ["-config.file=/etc/mimir.yml"]
+    depends_on:
+      - minio
+    volumes:
+      - ./configs/mimir.yml:/etc/mimir.yml
+      - mimir-data:/data
+      - /etc/localtime:/etc/localtime:ro
 
 volumes:
   grafana-data:
   tempo-data:
   prometheus-data:
   loki-data:
+  mimir-data:
+  minio-data:
