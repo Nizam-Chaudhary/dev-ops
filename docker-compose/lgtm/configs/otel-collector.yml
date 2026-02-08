@@ -1,55 +1,55 @@
 receivers:
-  otlp:
-    protocols:
-      grpc:
-        endpoint: "0.0.0.0:4317" # Change from localhost to 0.0.0.0
-      http:
-        endpoint: "0.0.0.0:4318" # Change from localhost to 0.0.0.0
+    otlp:
+        protocols:
+            grpc:
+                endpoint: '0.0.0.0:4317' # Change from localhost to 0.0.0.0
+            http:
+                endpoint: '0.0.0.0:4318' # Change from localhost to 0.0.0.0
 
 extensions:
-  health_check:
-    endpoint: 0.0.0.0:13133
+    health_check:
+        endpoint: 0.0.0.0:13133
 
 processors:
-  batch:
-  # transform:
-  #   log_statements:
-  #     - context: log
-  #       statements:
-  #         - set(body, ParseJSONOrDefault(body, body))
+    batch:
+    # transform:
+    #   log_statements:
+    #     - context: log
+    #       statements:
+    #         - set(body, ParseJSONOrDefault(body, body))
 
 exporters:
-  otlp_grpc/tempo:
-    endpoint: tempo:4317 # Send traces to Tempo
-    tls:
-      insecure: true
+    otlp_grpc/tempo:
+        endpoint: tempo:4317 # Send traces to Tempo
+        tls:
+            insecure: true
 
-  prometheus:
-    endpoint: "0.0.0.0:9464" # Expose Prometheus metrics
-    
-  # otlp_http/mimir:
-  #   endpoint: http://mimir:8080/otlp
-  #   headers:
-  #     X-Scope-OrgID: demo
-  #   tls:
-  #     insecure: true
+    prometheus:
+        endpoint: '0.0.0.0:9464' # Expose Prometheus metrics
 
-  otlp_http/loki:
-    endpoint: http://loki:3100/otlp
-    tls:
-      insecure: true
-    
+    # otlp_http/mimir:
+    #   endpoint: http://mimir:8080/otlp
+    #   headers:
+    #     X-Scope-OrgID: demo
+    #   tls:
+    #     insecure: true
+
+    otlp_http/loki:
+        endpoint: http://loki:3100/otlp
+        tls:
+            insecure: true
+
 service:
-  pipelines:
-    traces:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [otlp_grpc/tempo]
-    metrics:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [prometheus]
-    logs:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [otlp_http/loki]
+    pipelines:
+        traces:
+            receivers: [otlp]
+            processors: [batch]
+            exporters: [otlp_grpc/tempo]
+        metrics:
+            receivers: [otlp]
+            processors: [batch]
+            exporters: [prometheus]
+        logs:
+            receivers: [otlp]
+            processors: [batch]
+            exporters: [otlp_http/loki]

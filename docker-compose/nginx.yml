@@ -1,17 +1,17 @@
-version: "3.2"
+version: '3.2'
 
 services:
-  web:
-    image: nginx:alpine
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.nginx.loadbalancer.server.port=80"
-      - "traefik.http.routers.nginx.rule=Host(`nginx.passman.live`)"
-      - "traefik.http.routers.nginx.entrypoints=websecure"
-      - "traefik.http.routers.nginx.tls.certresolver=myresolver"
-    networks:
-      - web
+    web:
+        image: nginx:alpine
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.services.nginx.loadbalancer.server.port=80'
+            - 'traefik.http.routers.nginx.rule=Host(`nginx.passman.live`)'
+            - 'traefik.http.routers.nginx.entrypoints=websecure'
+            - 'traefik.http.routers.nginx.tls.certresolver=myresolver'
+        networks:
+            - web
 
 networks:
-  web:
-    external: true
+    web:
+        external: true

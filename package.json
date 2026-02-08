@@ -1,0 +1,38 @@
+{
+    "name": "devops",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "format": "oxfmt",
+        "lint": "oxlint ",
+        "lint:fix": "oxlint  --fix --fix-suggestions",
+        "lint:fix-dangerously": "oxlint  --fix --fix-suggestions --fix-dangerously",
+        "lint:type": "oxlint --type-aware --type-check",
+        "lint:type:fix": "oxlint --type-aware --type-check --fix --fix-suggestions",
+        "lint:type:fix-dangerously": "oxlint --type-aware --type-check --fix --fix-suggestions --fix-dangerously",
+        "typecheck": "tsgo --noEmit",
+        "clean": "rimraf node_modules",
+        "prepare": "husky"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^20.4.0",
+        "@commitlint/config-conventional": "^20.4.0",
+        "@types/bun": "latest",
+        "@types/node": "^25.1.0",
+        "@typescript/native-preview": "^7.0.0-dev.20260206.1",
+        "husky": "^9.1.7",
+        "lint-staged": "^16.2.7",
+        "oxfmt": "^0.28.0",
+        "oxlint": "^1.43.0",
+        "oxlint-tsgolint": "^0.11.4",
+        "rimraf": "^6.1.2",
+        "typescript": "^5.9.3"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "lint-staged": {
+        "*": "oxfmt --no-error-on-unmatched-pattern",
+        "*.{js,jsx,ts,tsx,mjs,cjs}": "bun run lint:type:fix"
+    }
+}
